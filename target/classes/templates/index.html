@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring boot Rest Api</title>
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .edit_user {display:inline-block;}
+        .edit_user img {display:block;}
+        .delete_user {display:inline-block;}
+        .delete_user img {display:block;}
+        .get_user_response {display: inline-block}
+    </style>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src="js/users.js"></script>
+</head>
+<body bgcolor='#ccc' style='font-family:Tahoma; background:#dddddd;'>
+    <center><h3>Users</h3></center>
+    <table width="75%" align="center" border="1">
+        <thead >
+            <tr>
+                <th width="20%">First Name</th>
+                <th width="20%">Last Name</th>
+                <th width="20%">e-mail</th>
+                <th width="20%">Phone</th>
+                <th width="20%">
+                    <input type="button" id="btn_add_new_user" name="btn_add_new_user" class="add_user" value="Add new user"/>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tusers">
+        </tbody>
+    </table>
+    <script>
+        getAllUsers();
+    </script>
+    <br><br><br>
+    <table border="0" align="center" width="75%">
+        <tr>
+            <td>
+                ID: <input type="text" id="user_get_id" value="1"/>
+                <input type="button" id="get_user_by_id" class="get_user_by_id" value="get user data by ID"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Response: <div id="get_user_response" class="get_user_response"></div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <div id="boxes">
+        <div id="frm_modify_user" class="window">
+            <center><font size="+2"><div id="modify_user_title">Add new user</div></font></center><br>
+            <div id='loader_div' style='display:none' align="center"><img src="img/loader.gif" alt="Uploading...." /></div>
+            <table width="100%" border="1" cellpadding="8">
+                <tr>
+                    <td width="40%" align="left"><b>First Name:</b></td>
+                    <td width="60%" align="center">
+                        <input type="hidden" id="modify_user_id" name="modify_user_id"/>
+                        <input type="text" id="modify_user_first_name" name="modify_user_first_name" style="width: 100%" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="40%" align="left"><b>Last Name:</b></td>
+                    <td width="60%" align="center">
+                        <input type="text" id="modify_user_last_name" name="modify_user_last_name" style="width: 100%" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="40%" align="left"><b>e-mail:</b></td>
+                    <td width="60%" align="center">
+                        <input type="text" id="modify_user_email" name="modify_user_email" style="width: 100%" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="40%" align="left"><b>Phone:</b></td>
+                    <td width="60%" align="center">
+                        <input type="text" id="modify_user_phone" name="modify_user_phone" style="width: 100%" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <table border="0" width="100%">
+                            <tr>
+                                <td width="50%" align="center">
+                                    <input type="button" style="height: 35px" id="btn_modify_user" name="btn_modify_user" class="modify_user_data" value="Add" />
+                                </td>
+                                <td width="50%" align="center">
+                                    <input type="button" style="height: 35px" id="btn_modify_user_cancel" name="btn_modify_user_cancel" class="modify_user_cancel" value="Cancel" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="mask"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $('.add_user').click(function(e) {
+        e.preventDefault();
+        //Get the A tag
+        var id = "#frm_modify_user";
+        $('#modify_user_id').val("");
+        $('#modify_user_first_name').val("");
+        $('#modify_user_last_name').val("");
+        $('#modify_user_email').val("");
+        $('#modify_user_phone').val("");
+        $('#modify_user_title').html("Add new user");
+        $('#btn_modify_user').val("Add");
+        //Get the screen height and width
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+        //Set heigth and width to mask to fill up the whole screen
+        $('#mask').css({'width':maskWidth,'height':maskHeight});
+        //transition effect
+        $('#mask').fadeIn(0);
+        //$('#mask').fadeTo("slow",0.8);
+
+        //Get the window height and width
+        var winH = Math.min(screen.height, document.documentElement.clientHeight);
+        var winW = screen.width; //$(window).screen.width();
+        //Set the popup window to center
+        $(id).css('top',  winH/2-$(id).height()/2);
+        $(id).css('left', winW/2-$(id).width()/2);
+        //transition effect
+        $(id).fadeIn(0);
+        $('#modify_user_first_name').focus();
+    });
+
+    $('.modify_user_cancel').on('click', function() {
+        closeModalForm();
+    });
+
+    $('.modify_user_data').click(function () {
+        var user_id = $('#modify_user_id').val();
+        var user_first_name = $('#modify_user_first_name').val();
+        var user_last_name = $('#modify_user_last_name').val();
+        var user_email = $('#modify_user_email').val();
+        var user_pnone = $('#modify_user_phone').val();
+        if (user_id == "") {
+            addUser(user_first_name, user_last_name, user_email, user_pnone);
+        } else {
+            modifyUser(user_id, user_first_name, user_last_name, user_email, user_pnone);
+        }
+    });
+
+    $('.get_user_by_id').click(function () {
+        var user_id = $('#user_get_id').val();
+        if (Number(user_id) <= 0) {
+            alert("Incorrect ID!");
+            return;
+        } else {
+            getUser(user_id);
+        }
+    })
+</script>
