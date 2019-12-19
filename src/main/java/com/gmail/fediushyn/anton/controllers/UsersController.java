@@ -32,23 +32,11 @@ public class UsersController {
 
     @PostMapping
     public UsersModifyResponse addUser(UsersDTO user){
-        try {
-            Thread.sleep(10000);
-            // any action
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return usersService.addUser(user);
     }
 
     @PutMapping
     public UsersModifyResponse editUser(UsersDTO user){
-        try {
-            Thread.sleep(10000);
-            // any action
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return usersService.updateUser(user);
     }
 
