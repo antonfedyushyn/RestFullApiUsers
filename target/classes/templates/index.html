@@ -11,12 +11,12 @@
         .delete_user img {display:block;}
         .get_user_response {display: inline-block}
     </style>
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src='js/jquery.min.js'></script>
     <script src="js/users.js"></script>
 </head>
-<body bgcolor='#ccc' style='font-family:Tahoma; background:#dddddd;'>
-    <center><h3>Users</h3></center>
-    <table width="75%" align="center" border="1">
+<body bgcolor='#ccc'>
+    <h3 class="center">Users</h3>
+    <table width="75%" align="center" border="1" class="center">
         <thead >
             <tr>
                 <th width="20%">First Name</th>
@@ -38,7 +38,7 @@
     <table border="0" align="center" width="75%">
         <tr>
             <td>
-                ID: <input type="text" id="user_get_id" value="1"/>
+                ID: <input id="user_get_id" value="1" title="ID user"/>
                 <input type="button" id="get_user_by_id" class="get_user_by_id" value="get user data by ID"/>
             </td>
         </tr>
@@ -51,7 +51,7 @@
     <br>
     <div id="boxes">
         <div id="frm_modify_user" class="window">
-            <center><font size="+2"><div id="modify_user_title">Add new user</div></font></center><br>
+            <div id="modify_user_title" class="center">Add new user</div><br>
             <div id='loader_div' style='display:none' align="center"><img src="img/loader.gif" alt="Uploading...." /></div>
             <table width="100%" border="1" cellpadding="8">
                 <tr>
